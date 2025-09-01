@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cookie Clicker Clone</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f8f1e4;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    #cookie {
+      width: 200px;
+      height: 200px;
+      background-image: url('https://orteil.dashnet.org/cookieclicker/img/perfectCookie.png');
+      background-size: cover;
+      margin: 30px auto;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    #cookie:active {
+      transform: scale(0.95);
+    }
+
+    #counter {
+      font-size: 24px;
+      margin: 10px;
+    }
+
+    #store {
+      margin-top: 30px;
+    }
+
+    .upgrade {
+      padding: 10px 20px;
+      margin: 10px auto;
+      width: 200px;
+      border: 2px solid #999;
+      background-color: #fff;
+      cursor: pointer;
+    }
+
+    .upgrade:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cookie Clicker Clone</h1>
+  <div id="cookie"></div>
+  <div id="counter">Cookies: 0</div>
+
+  <div id="store">
+    <button id="cursorUpgrade" class="upgrade">
+      Buy Cursor (Cost: 15) — +1 cookie/sec<br>
+      Owned: <span id="cursorCount">0</span>
+    </button>
+  </div>
+
+  <script>
+    let cookies = 0;
+    let cookiesPerClick = 1;
+    let cookiesPerSecond = 0;
+
+    let cursorCount = 0;
+    let cursorCost = 15;
+
+    const cookieEl = document.getElementById('cookie');
+    const counterEl = document.getElementById('counter');
+    const cursorBtn = document.getElementById('cursorUpgrade');
+    const cursorCountEl = document.getElementById('cursorCount');
+
+    // Clicking the cookie
+    cookieEl.addEventListener('click', () => {
+      cookies += cookiesPerClick;
+      updateDisplay();
+    });
+
+    // Buy cursor
+    cursorBtn.addEventListener('click', () => {
+      if (cookies >= cursorCost) {
+        cookies -= cursorCost;
+        cursorCount++;
+        cookiesPerSecond += 1;
+        cursorCost = Math.floor(cursorCost * 1.15);
+        cursorBtn.innerHTML = `Buy Cursor (Cost: ${cursorCost}) — +1 cookie/sec<br>Owned: <span id="cursorCount">${cursorCount}</span>`;
+        updateDisplay();
+      }
+    });
+
+    // Auto cookie production
+    setInterval(() => {
+      cookies += cookiesPerSecond;
+      updateDisplay();
+    }, 1000);
+
+    function updateDisplay() {
+      counterEl.textContent = `Cookies: ${Math.floor(cookies)}`;
+      cursorBtn.disabled = cookies < cursorCost;
+    }
+  </script>
+</body>
+</html>
