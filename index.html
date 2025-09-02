@@ -6,22 +6,23 @@
   <title>Sunbeam Bakery</title>
   <meta name="description" content="A complex Cookie Clicker-style incremental game ready for GitHub Pages. Fully client-side, autosave, export/import." />
   <style>
-    :root{--bg:#0b0e14;--card:#0f1724;--muted:#9aa3b2;--accent:#ffd893;--accent-2:#f5b2ff;--text:#eef3ff;--cookie-base:#c98b55;--cookie-dark:#8a4f2a;--cookie-shadow:#5a3216;--highlight:#fff8cc;--shine:#ffd154}
-    *{box-sizing:border-box}
+    :root{--bg:#0b0e14;--card:#0f1724;--muted:#9aa3b2;--accent:#ffd893;--accent-2:#f5b2ff;--text:#eef3ff;--cookie-base:#c98b55;--cookie-dark:#8a4f2a;--cookie-shadow:#5a3216;--highlight:#fff8cc;--shine:#ffd154;--border:rgba(255,255,255,.03);--hover-bg:#111c30}
+    *{box-sizing:border-box;transition:background .2s, transform .1s}
     html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:var(--text);background:linear-gradient(180deg,#071021 0%, #081227 35%, #07121b 100%);}
-    .wrap{max-width:1200px;margin:20px auto;padding:18px;display:grid;grid-template-columns:360px 1fr 360px;gap:18px}
-    .panel{background:linear-gradient(180deg,var(--card),#0c1220);border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,.03);box-shadow:0 10px 30px rgba(2,6,23,.6)}
-    header.panel{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:radial-gradient(circle at 30% 25%, #fff6d0, #ffd08a 10%, #c5822b 55%, #6b3f18 100%);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:inset 0 6px 10px rgba(255,255,255,.06),0 8px 30px rgba(0,0,0,.5)}
-    h1{margin:0;font-size:20px}
+    .wrap{max-width:1280px;margin:30px auto;padding:20px;display:grid;grid-template-columns:380px 1fr 380px;gap:20px}
+    .panel{background:linear-gradient(180deg,var(--card),#0c1220);border-radius:16px;padding:16px;border:1px solid var(--border);box-shadow:0 12px 40px rgba(2,6,23,.5)}
+    header.panel{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:60px;height:60px;border-radius:14px;background:radial-gradient(circle at 30% 25%, #fff6d0, #ffd08a 10%, #c5822b 55%, #6b3f18 100%);display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:inset 0 6px 10px rgba(255,255,255,.06),0 8px 30px rgba(0,0,0,.5)}
+    h1{margin:0;font-size:22px}
     small{color:var(--muted)}
 
     /* left column */
-    .left .stats{display:grid;gap:8px}
-    .big-cookie-wrap{display:flex;align-items:center;justify-content:center;padding:18px}
-    .big-cookie{width:280px;height:280px;border-radius:50%;position:relative;cursor:pointer;user-select:none;display:grid;place-items:center;transition:transform .08s ease}
-    /* improved cookie look: more detailed gradients, more chips, subtle texture */
+    .left .stats{display:grid;gap:10px}
+    .big-cookie-wrap{display:flex;align-items:center;justify-content:center;padding:20px}
+    .big-cookie{width:300px;height:300px;border-radius:50%;position:relative;cursor:pointer;user-select:none;display:grid;place-items:center;transition:transform .08s ease}
+    .big-cookie:hover{transform:scale(1.02)}
+    /* improved cookie look */
     .big-cookie .surface{position:absolute;inset:0;border-radius:50%;
       background:
         radial-gradient(60% 45% at 65% 35%, rgba(255,255,255,.12), transparent 15%),
@@ -29,44 +30,48 @@
         radial-gradient(20% 15% at 50% 50%, rgba(255,240,200,.08), transparent 20%),
         linear-gradient(180deg,var(--cookie-base),var(--cookie-dark) 60%,var(--cookie-shadow) 100%);
       box-shadow:0 20px 50px rgba(0,0,0,.55), inset 0 -14px 30px rgba(0,0,0,.3), inset 0 8px 24px rgba(255,255,255,.04);
-      /* subtle texture */
       background-image: linear-gradient(180deg,var(--cookie-base),var(--cookie-dark) 60%,var(--cookie-shadow) 100%), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAADBJREFUOE9jYOBa2cDAwMAABgABmQtOqwAAAABJRU5ErkJggg==');
       background-blend-mode: overlay;
     }
     .big-cookie .shine{position:absolute;left:18%;top:8%;width:60%;height:60%;border-radius:50%;background:radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.25), rgba(255,255,255,.02) 30%, transparent 60%);filter:blur(6px);mix-blend-mode:screen}
     .chip{position:absolute;border-radius:50%;width:28px;height:28px;background:linear-gradient(180deg,#3b2314,#1e110a);box-shadow:inset 0 2px 4px rgba(255,255,255,.03),0 8px 18px rgba(0,0,0,.45)}
     .chip::after{content:'';position:absolute;inset:6px;border-radius:50%;background:rgba(0,0,0,.2)}
-    .cookie-label{position:absolute;bottom:18px;font-weight:800;color:var(--accent);text-shadow:0 6px 18px rgba(0,0,0,.6)}
-    .counters{padding:10px 6px}
-    .counters .row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);border:1px solid rgba(255,255,255,.02)}
-    .hint{font-size:13px;color:var(--muted);margin-top:6px}
+    .cookie-label{position:absolute;bottom:20px;font-weight:800;color:var(--accent);text-shadow:0 6px 18px rgba(0,0,0,.6)}
+    .counters{padding:12px 8px}
+    .counters .row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);border:1px solid var(--border)}
+    .hint{font-size:13px;color:var(--muted);margin-top:8px}
 
     /* center */
-    .tabs{display:flex;gap:8px;margin-bottom:10px}
-    .tab{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer}
-    .tab.active{background:linear-gradient(180deg,#0f1a2a,#0d1724);color:var(--text);border-color:rgba(255,255,255,.04)}
-    .views{min-height:260px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-    .card-up{padding:10px;border-radius:12px;background:linear-gradient(180deg,#091225,#081220);border:1px solid rgba(255,255,255,.02);display:flex;gap:10px;align-items:center}
-    .card-up .icon{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;font-size:20px;background:linear-gradient(180deg,#13192a,#0d1120)}
+    .tabs{display:flex;gap:10px;margin-bottom:12px}
+    .tab{padding:10px 14px;border-radius:12px;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer}
+    .tab:hover{background:rgba(255,255,255,.02)}
+    .tab.active{background:linear-gradient(180deg,#0f1a2a,#0d1724);color:var(--text);border-color:var(--border)}
+    .views{min-height:300px;overflow:hidden}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;max-height:500px;overflow-y:auto;padding-right:8px}
+    .card-up{padding:12px;border-radius:14px;background:linear-gradient(180deg,#091225,#081220);border:1px solid var(--border);display:flex;gap:12px;align-items:center}
+    .card-up:hover{background:linear-gradient(180deg,var(--hover-bg),#0a1528)}
+    .card-up .icon{width:50px;height:50px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:linear-gradient(180deg,#13192a,#0d1120)}
     .card-up .meta{flex:1}
     .cost{font-weight:800;color:var(--accent)}
 
     /* right */
-    .shop-list{display:grid;gap:8px}
-    .shop-row{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;background:linear-gradient(180deg,#081125,#07101a);border:1px solid rgba(255,255,255,.02)}
+    .shop-list{display:grid;gap:10px;max-height:600px;overflow-y:auto;padding-right:8px}
+    .shop-row{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:linear-gradient(180deg,#081125,#07101a);border:1px solid var(--border)}
+    .shop-row:hover{background:linear-gradient(180deg,var(--hover-bg),#0a1528)}
     .shop-row.locked{opacity:.5;filter:grayscale(.2)}
-    .shop-row .btns{display:flex;gap:6px}
-    .btn{background:#0b1220;padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.03);cursor:pointer}
+    .shop-row .btns{display:flex;gap:8px}
+    .btn{background:#0b1220;padding:10px 12px;border-radius:10px;border:1px solid var(--border);cursor:pointer}
+    .btn:hover{background:#121a2c}
     .btn.primary{background:linear-gradient(180deg,#3a2d10,#2a210f);color:#fff}
+    .btn.primary:hover{background:linear-gradient(180deg,#4a3d20,#3a311f)}
 
-    .footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;margin-top:6px}
+    .footer{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-top:8px}
 
     /* toast */
-    .toast{position:fixed;right:18px;bottom:18px;background:linear-gradient(180deg,#071225,#06101a);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.02);opacity:0;transform:translateY(10px);transition:all .28s}
+    .toast{position:fixed;right:20px;bottom:20px;background:linear-gradient(180deg,#071225,#06101a);padding:12px 14px;border-radius:12px;border:1px solid var(--border);opacity:0;transform:translateY(10px);transition:all .28s}
     .toast.show{opacity:1;transform:translateY(0)}
 
-    @media(max-width:1100px){.wrap{grid-template-columns:1fr;}.footer{flex-direction:column;gap:8px}}
+    @media(max-width:1100px){.wrap{grid-template-columns:1fr;}.footer{flex-direction:column;gap:10px}}
   </style>
 </head>
 <body>
@@ -79,7 +84,7 @@
           <small id="bakeryTag">A cozy incremental bakery — made for GitHub Pages</small>
         </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
+      <div style="display:flex;gap:10px;align-items:center">
         <button class="btn" id="exportBtn">Export</button>
         <button class="btn" id="importBtn">Import</button>
         <button class="btn primary" id="saveBtn">Save</button>
@@ -123,11 +128,14 @@
           <div class="grid" id="achGrid"></div>
         </div>
         <div id="view-settings" class="view" style="display:none">
-          <div style="display:grid;gap:8px">
-            <div style="display:flex;gap:8px;align-items:center"><label style="flex:1">Bakery name</label><input id="nameInput" style="background:#081225;border:1px solid rgba(255,255,255,.02);padding:8px;border-radius:8px;color:var(--text)"/></div>
-            <div style="display:flex;gap:8px;align-items:center"><label style="flex:1">Autosave (sec)</label><input id="autosaveInput" type="number" min="5" value="15" style="width:80px;background:#081225;border:1px solid rgba(255,255,255,.02);padding:8px;border-radius:8px;color:var(--text)"/></div>
-            <div style="display:flex;gap:8px;align-items:center"><label style="flex:1">Show floats</label><input id="floatToggle" type="checkbox" checked/></div>
-            <div><textarea id="exportBox" style="width:100%;min-height:120px;background:#06101a;border:1px solid rgba(255,255,255,.02);color:var(--text);padding:8px;border-radius:8px" placeholder="Exported save will appear here"></textarea></div>
+          <div style="display:grid;gap:10px">
+            <div style="display:flex;gap:10px;align-items:center"><label style="flex:1">Bakery name</label><input id="nameInput" style="background:#081225;border:1px solid var(--border);padding:10px;border-radius:10px;color:var(--text);flex:2"/></div>
+            <div style="display:flex;gap:10px;align-items:center"><label style="flex:1">Autosave (sec)</label><input id="autosaveInput" type="number" min="5" value="15" style="width:100px;background:#081225;border:1px solid var(--border);padding:10px;border-radius:10px;color:var(--text)"/></div>
+            <div style="display:flex;gap:10px;align-items:center"><label style="flex:1">Show floats</label><input id="floatToggle" type="checkbox" checked/></div>
+            <div style="display:flex;gap:10px;align-items:center"><label style="flex:1">Background music</label><input id="musicToggle" type="checkbox" checked/></div>
+            <div style="display:flex;gap:10px;align-items:center"><label style="flex:1">Click sounds</label><input id="soundToggle" type="checkbox" checked/></div>
+            <div style="display:flex;gap:10px;align-items:center"><label style="flex:1">Theme</label><select id="themeSelect" style="background:#081225;border:1px solid var(--border);padding:10px;border-radius:10px;color:var(--text)"><option value="dark">Dark</option><option value="light">Light</option></select></div>
+            <div><textarea id="exportBox" style="width:100%;min-height:140px;background:#06101a;border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px" placeholder="Exported save will appear here"></textarea></div>
           </div>
         </div>
       </div>
@@ -139,12 +147,20 @@
     </aside>
 
     <footer class="footer panel">
-      <div>Client-only • Host on GitHub Pages • <span id="version">v1.3</span></div>
+      <div>Client-only • Host on GitHub Pages • <span id="version">v1.4</span></div>
       <div id="saveInfo">Last save: —</div>
     </footer>
   </div>
 
   <div id="toast" class="toast"></div>
+  <audio id="bgMusic" loop>
+    <!-- Placeholder for music; replace with actual URL or host file -->
+    <source src="https://www.soundjay.com/buttons/beep-07.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="clickSound">
+    <!-- Placeholder for click sound -->
+    <source src="https://www.soundjay.com/buttons/beep-08b.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
   // ---------- Utilities ----------
@@ -166,38 +182,92 @@
     {id:'wizard',name:'Wizard Tower',icon:'🧙',base:330000000,mult:1.15,cps:44000,desc:'Spells for sweets.'},
     {id:'shipment',name:'Shipment',icon:'🚀',base:5100000000,mult:1.15,cps:260000,desc:'Interplanetary cookies.'},
     {id:'alchemy',name:'Alchemy Lab',icon:'⚗️',base:75000000000,mult:1.15,cps:1600000,desc:'Transmutes gold into cookies.'},
+    {id:'portal',name:'Portal',icon:'🌀',base:1000000000000,mult:1.15,cps:10000000,desc:'Opens a door to the Cookieverse.'},
+    {id:'time',name:'Time Machine',icon:'⏳',base:14000000000000,mult:1.15,cps:65000000,desc:'Brings cookies from the past.'},
+    {id:'antimatter',name:'Antimatter Condenser',icon:'⚛️',base:170000000000000,mult:1.15,cps:430000000,desc:'Condenses the antimatter in the universe into cookies.'},
+    {id:'prism',name:'Prism',icon:'💎',base:2100000000000000,mult:1.15,cps:2900000000,desc:'Converts light itself into cookies.'},
+    {id:'chancemaker',name:'Chancemaker',icon:'🎲',base:26000000000000000,mult:1.15,cps:21000000000,desc:'Generates cookies out of thin air through some luck-based process.'},
+    {id:'fractal',name:'Fractal Engine',icon:'🔁',base:310000000000000000,mult:1.15,cps:150000000000,desc:'Turns cookies into even more cookies.'},
+    {id:'javascript',name:'Javascript Console',icon:'💻',base:7100000000000000000,mult:1.15,cps:1100000000000,desc:'Creates cookies from the very code this game was written in.'},
+    {id:'idleverse',name:'Idleverse',icon:'🌌',base:120000000000000000000,mult:1.15,cps:83000000000000,desc:'There\'s been countless other idle universes running alongside our own. You\'ve finally found a way to hijack their production and convert whatever they\'ve been making into cookies!'},
   ];
 
   const UPGRADES = [
     {id:'reinforced',name:'Reinforced Index Finger',icon:'👉',desc:'Double your click power',cost:100,apply:s=>s.clickMult*=2,show: s=>s.totalClicks>=20},
     {id:'carpal',name:'Carpal Tunnel Cream',icon:'🧴',desc:'+2 to base click',cost:800,apply:s=>s.baseClick+=2,show:s=>s.totalClicks>=200},
     {id:'ambidextrous',name:'Ambidextrous',icon:'👐',desc:'+5 to base click',cost:5000,apply:s=>s.baseClick+=5,show:s=>s.totalClicks>=1000},
+    {id:'thousandFingers',name:'Thousand Fingers',icon:'☝️',desc:'+10 to base click',cost:10000,apply:s=>s.baseClick+=10,show:s=>s.totalClicks>=5000},
+    {id:'millionFingers',name:'Million Fingers',icon:'✋',desc:'+20 to base click',cost:50000,apply:s=>s.baseClick+=20,show:s=>s.totalClicks>=10000},
     {id:'grandmaRecr',name:'Grandma Recruitment',icon:'🧁',desc:'Grandmas produce +100%',cost:5000,apply:s=>s.buildings['grandma'].mult*=2,show:s=>s.buildings['grandma'].count>=5},
     {id:'grandmaLove',name:'Grandma Love',icon:'❤️',desc:'Grandmas +50% production',cost:15000,apply:s=>s.buildings['grandma'].mult*=1.5,show:s=>s.buildings['grandma'].count>=15},
+    {id:'grandmaAnger',name:'Grandma Anger',icon:'😠',desc:'Grandmas +100% production',cost:50000,apply:s=>s.buildings['grandma'].mult*=2,show:s=>s.buildings['grandma'].count>=50},
     {id:'factoryBoost',name:'Factory Automation',icon:'🔧',desc:'Factories +150% production',cost:25000,apply:s=>s.buildings['factory'].mult*=2.5,show:s=>s.buildings['factory'].count>=3},
     {id:'factoryOverclock',name:'Factory Overclock',icon:'⚙️',desc:'Factories +100% production',cost:100000,apply:s=>s.buildings['factory'].mult*=2,show:s=>s.buildings['factory'].count>=10},
+    {id:'factoryUpgrade',name:'Factory Upgrade',icon:'🏗️',desc:'Factories +200% production',cost:500000,apply:s=>s.buildings['factory'].mult*=3,show:s=>s.buildings['factory'].count>=20},
     {id:'farmFertilizer',name:'Farm Fertilizer',icon:'🌱',desc:'Farms +200% production',cost:20000,apply:s=>s.buildings['farm'].mult*=3,show:s=>s.buildings['farm'].count>=5},
+    {id:'farmIrrigation',name:'Farm Irrigation',icon:'💧',desc:'Farms +100% production',cost:100000,apply:s=>s.buildings['farm'].mult*=2,show:s=>s.buildings['farm'].count>=15},
     {id:'mineDrill',name:'Deep Drilling',icon:'🕳️',desc:'Mines +100% production',cost:50000,apply:s=>s.buildings['mine'].mult*=2,show:s=>s.buildings['mine'].count>=5},
+    {id:'mineExplosives',name:'Explosive Mining',icon:'💥',desc:'Mines +150% production',cost:200000,apply:s=>s.buildings['mine'].mult*=2.5,show:s=>s.buildings['mine'].count>=10},
     {id:'bankInterest',name:'Compound Interest',icon:'💰',desc:'Banks +50% production',cost:200000,apply:s=>s.buildings['bank'].mult*=1.5,show:s=>s.buildings['bank'].count>=5},
+    {id:'bankLoans',name:'Cookie Loans',icon:'📈',desc:'Banks +100% production',cost:1000000,apply:s=>s.buildings['bank'].mult*=2,show:s=>s.buildings['bank'].count>=10},
     {id:'templePrayer',name:'Divine Blessing',icon:'🙏',desc:'Temples +100% production',cost:1000000,apply:s=>s.buildings['temple'].mult*=2,show:s=>s.buildings['temple'].count>=3},
+    {id:'templeGods',name:'Cookie Gods',icon:'🛐',desc:'Temples +150% production',cost:5000000,apply:s=>s.buildings['temple'].mult*=2.5,show:s=>s.buildings['temple'].count>=8},
     {id:'wizardMana',name:'Mana Surge',icon:'✨',desc:'Wizard Towers +150% production',cost:5000000,apply:s=>s.buildings['wizard'].mult*=2.5,show:s=>s.buildings['wizard'].count>=3},
+    {id:'wizardSpells',name:'Arcane Spells',icon:'📖',desc:'Wizard Towers +100% production',cost:20000000,apply:s=>s.buildings['wizard'].mult*=2,show:s=>s.buildings['wizard'].count>=10},
     {id:'shipmentWarp',name:'Warp Drive',icon:'🌌',desc:'Shipments +100% production',cost:20000000,apply:s=>s.buildings['shipment'].mult*=2,show:s=>s.buildings['shipment'].count>=3},
+    {id:'shipmentHyper',name:'Hyperspace Shipping',icon:'🚀',desc:'Shipments +200% production',cost:100000000,apply:s=>s.buildings['shipment'].mult*=3,show:s=>s.buildings['shipment'].count>=10},
     {id:'alchemyGold',name:'Philosopher\'s Stone',icon:'🪄',desc:'Alchemy Labs +200% production',cost:100000000,apply:s=>s.buildings['alchemy'].mult*=3,show:s=>s.buildings['alchemy'].count>=3},
+    {id:'alchemyTrans',name:'Advanced Transmutation',icon:'🔬',desc:'Alchemy Labs +150% production',cost:500000000,apply:s=>s.buildings['alchemy'].mult*=2.5,show:s=>s.buildings['alchemy'].count>=10},
+    {id:'portalUniverse',name:'Cookieverse Portal',icon:'🌀',desc:'Portals +100% production',cost:1000000000,apply:s=>s.buildings['portal'].mult*=2,show:s=>s.buildings['portal'].count>=5},
+    {id:'portalStabilize',name:'Portal Stabilization',icon:'⚖️',desc:'Portals +150% production',cost:5000000000,apply:s=>s.buildings['portal'].mult*=2.5,show:s=>s.buildings['portal'].count>=10},
+    {id:'timeParadox',name:'Time Paradox',icon:'⌛',desc:'Time Machines +100% production',cost:10000000000,apply:s=>s.buildings['time'].mult*=2,show:s=>s.buildings['time'].count>=5},
+    {id:'timeFlux',name:'Flux Capacitors',icon:'🔋',desc:'Time Machines +200% production',cost:50000000000,apply:s=>s.buildings['time'].mult*=3,show:s=>s.buildings['time'].count>=10},
+    {id:'antimatterCondense',name:'Antimatter Condensation',icon:'🧊',desc:'Antimatter Condensers +150% production',cost:100000000000,apply:s=>s.buildings['antimatter'].mult*=2.5,show:s=>s.buildings['antimatter'].count>=5},
+    {id:'antimatterBoost',name:'Antimatter Boost',icon:'🚀',desc:'Antimatter Condensers +100% production',cost:500000000000,apply:s=>s.buildings['antimatter'].mult*=2,show:s=>s.buildings['antimatter'].count>=10},
+    {id:'prismLight',name:'Rainbow Light',icon:'🌈',desc:'Prisms +200% production',cost:1000000000000,apply:s=>s.buildings['prism'].mult*=3,show:s=>s.buildings['prism'].count>=5},
+    {id:'prismRefract',name:'Light Refraction',icon:'🔍',desc:'Prisms +100% production',cost:5000000000000,apply:s=>s.buildings['prism'].mult*=2,show:s=>s.buildings['prism'].count>=10},
+    {id:'chanceLuck',name:'Lucky Charms',icon:'🍀',desc:'Chancemakers +150% production',cost:10000000000000,apply:s=>s.buildings['chancemaker'].mult*=2.5,show:s=>s.buildings['chancemaker'].count>=5},
+    {id:'chanceProbability',name:'Probability Control',icon:'📊',desc:'Chancemakers +100% production',cost:50000000000000,apply:s=>s.buildings['chancemaker'].mult*=2,show:s=>s.buildings['chancemaker'].count>=10},
+    {id:'fractalSelf',name:'Self-Referential',icon:'♾️',desc:'Fractal Engines +200% production',cost:100000000000000,apply:s=>s.buildings['fractal'].mult*=3,show:s=>s.buildings['fractal'].count>=5},
+    {id:'fractalLoop',name:'Infinite Loop',icon:'🔄',desc:'Fractal Engines +100% production',cost:500000000000000,apply:s=>s.buildings['fractal'].mult*=2,show:s=>s.buildings['fractal'].count>=10},
+    {id:'jsCode',name:'Cookie Code',icon:'🖥️',desc:'Javascript Consoles +150% production',cost:1000000000000000,apply:s=>s.buildings['javascript'].mult*=2.5,show:s=>s.buildings['javascript'].count>=5},
+    {id:'jsHack',name:'Reality Hacking',icon:'🔓',desc:'Javascript Consoles +100% production',cost:5000000000000000,apply:s=>s.buildings['javascript'].mult*=2,show:s=>s.buildings['javascript'].count>=10},
+    {id:'idleMultiverse',name:'Multiverse Idle',icon:'🌐',desc:'Idleverses +200% production',cost:10000000000000000,apply:s=>s.buildings['idleverse'].mult*=3,show:s=>s.buildings['idleverse'].count>=5},
+    {id:'idleHarvest',name:'Idle Harvesting',icon:'🌾',desc:'Idleverses +100% production',cost:50000000000000000,apply:s=>s.buildings['idleverse'].mult*=2,show:s=>s.buildings['idleverse'].count>=10},
     {id:'globalBoost1',name:'Cookie Amplifier',icon:'🔊',desc:'Global production +10%',cost:100000,apply:s=>s.globalMult*=1.1,show:s=>s.cookiesAllTime>=100000},
     {id:'globalBoost2',name:'Mega Amplifier',icon:'📢',desc:'Global production +20%',cost:1000000,apply:s=>s.globalMult*=1.2,show:s=>s.cookiesAllTime>=1000000},
+    {id:'globalBoost3',name:'Giga Amplifier',icon:'🔥',desc:'Global production +30%',cost:10000000,apply:s=>s.globalMult*=1.3,show:s=>s.cookiesAllTime>=10000000},
+    {id:'globalBoost4',name:'Tera Amplifier',icon:'⚡',desc:'Global production +40%',cost:100000000,apply:s=>s.globalMult*=1.4,show:s=>s.cookiesAllTime>=100000000},
   ];
 
   const ACHIEVEMENTS = [
     {id:'click100',name:'Finger Gym',desc:'Click 100 times',cond:s=>s.totalClicks>=100},
     {id:'click1000',name:'Click Master',desc:'Click 1,000 times',cond:s=>s.totalClicks>=1000},
+    {id:'click10000',name:'Click Legend',desc:'Click 10,000 times',cond:s=>s.totalClicks>=10000},
     {id:'cookies1k',name:'Cookie Jar',desc:'Have 1,000 cookies banked',cond:s=>s.cookies>=1000},
     {id:'cookies1m',name:'Cookie Vault',desc:'Have 1,000,000 cookies banked',cond:s=>s.cookies>=1000000},
+    {id:'cookies1b',name:'Cookie Bank',desc:'Have 1,000,000,000 cookies banked',cond:s=>s.cookies>=1000000000},
     {id:'own10',name:'Collector',desc:'Own 10 buildings total',cond:s=>totalBuildings(s)>=10},
     {id:'own50',name:'Hoarder',desc:'Own 50 buildings total',cond:s=>totalBuildings(s)>=50},
+    {id:'own100',name:'Builder',desc:'Own 100 buildings total',cond:s=>totalBuildings(s)>=100},
+    {id:'own500',name:'Architect',desc:'Own 500 buildings total',cond:s=>totalBuildings(s)>=500},
     {id:'grandma10',name:'Grandma Army',desc:'Own 10 grandmas',cond:s=>s.buildings['grandma'].count>=10},
+    {id:'grandma50',name:'Grandma Horde',desc:'Own 50 grandmas',cond:s=>s.buildings['grandma'].count>=50},
     {id:'factory5',name:'Industrialist',desc:'Own 5 factories',cond:s=>s.buildings['factory'].count>=5},
+    {id:'factory20',name:'Factory Mogul',desc:'Own 20 factories',cond:s=>s.buildings['factory'].count>=20},
     {id:'allUpgrades',name:'Upgrade Maniac',desc:'Buy all upgrades',cond:s=>Object.keys(s.upgrades).length >= UPGRADES.length},
     {id:'goldenClick',name:'Lucky Day',desc:'Click a golden cookie',cond:s=>s.goldenClicks>=1},
+    {id:'golden10',name:'Golden Touch',desc:'Click 10 golden cookies',cond:s=>s.goldenClicks>=10},
+    {id:'portal10',name:'Portal Master',desc:'Own 10 portals',cond:s=>s.buildings['portal'].count>=10},
+    {id:'time5',name:'Time Traveler',desc:'Own 5 time machines',cond:s=>s.buildings['time'].count>=5},
+    {id:'antimatter10',name:'Antimatter Expert',desc:'Own 10 antimatter condensers',cond:s=>s.buildings['antimatter'].count>=10},
+    {id:'prism5',name:'Light Bender',desc:'Own 5 prisms',cond:s=>s.buildings['prism'].count>=5},
+    {id:'chancemaker10',name:'Luck Master',desc:'Own 10 chancemakers',cond:s=>s.buildings['chancemaker'].count>=10},
+    {id:'fractal5',name:'Fractal Thinker',desc:'Own 5 fractal engines',cond:s=>s.buildings['fractal'].count>=5},
+    {id:'js10',name:'Code Wizard',desc:'Own 10 javascript consoles',cond:s=>s.buildings['javascript'].count>=10},
+    {id:'idleverse5',name:'Multiverse Explorer',desc:'Own 5 idleverses',cond:s=>s.buildings['idleverse'].count>=5},
+    {id:'cookiesAllTime1t',name:'Trillionaire',desc:'Bake 1 trillion cookies in total',cond:s=>s.cookiesAllTime>=1e12},
+    {id:'cookiesAllTime1q',name:'Quadrillionaire',desc:'Bake 1 quadrillion cookies in total',cond:s=>s.cookiesAllTime>=1e15},
   ];
 
   // ---------- State ----------
@@ -217,7 +287,7 @@
     lastSave:0,
     lastTick:Date.now(),
     timedMults:[],
-    options:{autosave:15, floats:true}
+    options:{autosave:15, floats:true, music:true, sounds:true, theme:'dark'}
   };
   BUILDINGS.forEach(b=>S.buildings[b.id]={count:0,mult:1});
 
@@ -233,7 +303,7 @@
   function load(){const raw=localStorage.getItem(SAVE_KEY); if(raw){try{const obj=JSON.parse(raw); S=Object.assign(S,obj); // ensure buildings exist
       BUILDINGS.forEach(b=>{S.buildings[b.id]=S.buildings[b.id]||{count:0,mult:1}});
     }catch(e){console.warn(e);} }
-    S._lastAutoSave=Date.now(); applyAll(); toast('Loaded save'); }
+    S._lastAutoSave=Date.now(); applyAll(); toast('Loaded save'); if(S.options.music) $('#bgMusic').play(); document.body.className = S.options.theme; }
 
   // ---------- Mechanics ----------
   function totalBuildings(state){return BUILDINGS.reduce((t,b)=>t+ (state.buildings[b.id]?.count||0),0)}
@@ -242,7 +312,7 @@
 
   function addCookies(n){S.cookies+=n; S.cookiesAllTime+=n;}
 
-  function clickCookie(x,y){const add=cookiesPerClick(); // crits
+  function clickCookie(x,y){if(S.options.sounds) $('#clickSound').play(); const add=cookiesPerClick(); // crits
     if(Math.random()<0.03){ const mult=10; addCookies(add*mult); spawnFloat('CRIT! x'+mult,x,y); } else { addCookies(add); if(S.options.floats) spawnFloat('+'+fmt(add),x,y); }
     S.totalClicks++; updateAll(); }
 
@@ -258,24 +328,24 @@
   function spawnGolden(){ const g = document.createElement('div'); g.className='golden'; g.style.position='fixed'; g.style.width='64px'; g.style.height='64px'; g.style.borderRadius='50%'; g.style.display='grid'; g.style.placeItems='center'; g.style.left=rand(80,innerWidth-160)+'px'; g.style.top=rand(120,innerHeight-220)+'px'; g.style.zIndex=9999; g.style.background='radial-gradient(circle at 30% 30%, var(--highlight), var(--shine) 40%, #d09b2a 70%, #8a5a1f 100%)'; g.textContent='🍯'; document.body.appendChild(g); const t=setTimeout(()=>g.remove(),12000); g.onclick=()=>{clearTimeout(t); g.remove(); S.goldenClicks++; if(Math.random()<0.5){ addTimedMult(7,30000); toast('Frenzy! x7 for 30s'); } else { const gain = Math.max(100, calcCPS()*10 + cookiesPerClick()*50); addCookies(gain); toast('Cookie shower! +'+fmt(gain)); } updateAll(); } }
 
   // ---------- UI Rendering ----------
-  function seedChips(){const wrap=$('#chips');wrap.innerHTML=''; const r=110,cx=140,cy=140; for(let i=0;i<40;i++){const t=Math.random()*Math.PI*2;const rr=r*rand(.25,.9);const x=cx+Math.cos(t)*rr;const y=cy+Math.sin(t)*rr;const el=document.createElement('div');el.className='chip';el.style.left=(x-14)+'px';el.style.top=(y-14)+'px';el.style.width=rand(20,32)+'px';el.style.height=el.style.width;wrap.appendChild(el);} }
+  function seedChips(){const wrap=$('#chips');wrap.innerHTML=''; const r=140,cx=150,cy=150; for(let i=0;i<50;i++){const t=Math.random()*Math.PI*2;const rr=r*rand(.2,.95);const x=cx+Math.cos(t)*rr;const y=cy+Math.sin(t)*rr;const el=document.createElement('div');el.className='chip';el.style.left=(x-14)+'px';el.style.top=(y-14)+'px';el.style.width=rand(20,32)+'px';el.style.height=el.style.width;wrap.appendChild(el);} }
 
-  function renderBuildings(){const g=$('#shopList'); g.innerHTML=''; for(const b of BUILDINGS){ const st=S.buildings[b.id]; const nextCost=Math.floor(b.base * Math.pow(b.mult, st.count)); const el=document.createElement('div'); el.className='shop-row'+(S.cookies<nextCost?' locked':''); el.innerHTML=`<div style="font-size:22px">${b.icon}</div><div style="flex:1"><div style="font-weight:800">${b.name} <small style="color:var(--muted);font-weight:600">x${st.count}</small></div><div style="color:var(--muted);font-size:13px">${b.desc}</div></div><div style="text-align:right"><div style="font-weight:900;color:var(--accent)">${fmt(nextCost)}</div><div class="btns"><button class="btn" data-buy="1">+1</button><button class="btn" data-buy="10">+10</button></div></div>`; el.querySelector('[data-buy="1"]').onclick=()=>buyBuilding(b.id,1); el.querySelector('[data-buy="10"]').onclick=()=>buyBuilding(b.id,10); g.appendChild(el);} }
+  function renderBuildings(){const g=$('#shopList'); g.innerHTML=''; for(const b of BUILDINGS){ const st=S.buildings[b.id]; const nextCost=Math.floor(b.base * Math.pow(b.mult, st.count)); const el=document.createElement('div'); el.className='shop-row'+(S.cookies<nextCost?' locked':''); el.innerHTML=`<div style="font-size:24px">${b.icon}</div><div style="flex:1"><div style="font-weight:800">${b.name} <small style="color:var(--muted);font-weight:600">x${st.count}</small></div><div style="color:var(--muted);font-size:13px">${b.desc}</div></div><div style="text-align:right"><div style="font-weight:900;color:var(--accent)">${fmt(nextCost)}</div><div class="btns"><button class="btn" data-buy="1">+1</button><button class="btn" data-buy="10">+10</button></div></div>`; el.querySelector('[data-buy="1"]').onclick=()=>buyBuilding(b.id,1); el.querySelector('[data-buy="10"]').onclick=()=>buyBuilding(b.id,10); g.appendChild(el);} }
 
-  function renderUpgrades(){const g=$('#upgradesGrid'); g.innerHTML=''; for(const u of UPGRADES){ const owned=!!S.upgrades[u.id]; const visible = u.show ? u.show(S) : true; if(!visible && !owned) continue; const el=document.createElement('div'); el.className='card-up'+(owned?' owned':''); el.innerHTML=`<div class="icon">${u.icon}</div><div class="meta"><div style="font-weight:800">${u.name} ${owned?'<small style="color:var(--muted)">[owned]</small>':''}</div><div style="color:var(--muted);font-size:13px">${u.desc}</div></div><div style="text-align:right"><div class="cost">${owned?'-':fmt(u.cost)}</div><div style="margin-top:6px"><button class="btn">Buy</button></div></div>`; el.querySelector('.btn').onclick=()=>{ if(owned){toast('Already owned'); return;} if(S.cookies < u.cost){toast('Not enough cookies');return;} S.cookies -= u.cost; S.upgrades[u.id]=true; if(u.apply) u.apply(S); toast('Upgrade bought: '+u.name); updateAll(); }; g.appendChild(el);} }
+  function renderUpgrades(){const g=$('#upgradesGrid'); g.innerHTML=''; for(const u of UPGRADES){ const owned=!!S.upgrades[u.id]; const visible = u.show ? u.show(S) : true; if(!visible && !owned) continue; const el=document.createElement('div'); el.className='card-up'+(owned?' owned':''); el.innerHTML=`<div class="icon">${u.icon}</div><div class="meta"><div style="font-weight:800">${u.name} ${owned?'<small style="color:var(--muted)">[owned]</small>':''}</div><div style="color:var(--muted);font-size:13px">${u.desc}</div></div><div style="text-align:right"><div class="cost">${owned?'-':fmt(u.cost)}</div><div style="margin-top:8px"><button class="btn">Buy</button></div></div>`; el.querySelector('.btn').onclick=()=>{ if(owned){toast('Already owned'); return;} if(S.cookies < u.cost){toast('Not enough cookies');return;} S.cookies -= u.cost; S.upgrades[u.id]=true; if(u.apply) u.apply(S); toast('Upgrade bought: '+u.name); updateAll(); }; g.appendChild(el);} }
 
   function renderAchievements(){const g=$('#achGrid'); g.innerHTML=''; for(const a of ACHIEVEMENTS){ const got=!!S.achievements[a.id]; const el=document.createElement('div'); el.className='card-up'+(got?'':' locked'); el.innerHTML=`<div class="icon">🏅</div><div class="meta"><div style="font-weight:800">${a.name} ${got?'<small style="color:var(--muted)">[unlocked]</small>':''}</div><div style="color:var(--muted);font-size:13px">${a.desc}</div></div>`; g.appendChild(el);} }
 
   function updateCounters(){ $('#cookies').textContent = fmt(Math.floor(S.cookies)); $('#cps').textContent = fmt((calcCPS()*currentTimedMult()).toFixed(2)) + ' /s'; $('#cpc').textContent = fmt(Math.round(cookiesPerClick())); }
 
-  function applyAll(){ $('#bakeryName').textContent = S.bakeryName||'Sunbeam Bakery'; $('#nameInput').value = S.bakeryName||'Sunbeam Bakery'; seedChips(); renderBuildings(); renderUpgrades(); renderAchievements(); updateCounters(); $('#saveInfo').textContent = S.lastSave ? 'Last save: '+new Date(S.lastSave).toLocaleString() : 'Last save: —'; }
+  function applyAll(){ $('#bakeryName').textContent = S.bakeryName||'Sunbeam Bakery'; $('#nameInput').value = S.bakeryName||'Sunbeam Bakery'; $('#autosaveInput').value = S.options.autosave; $('#floatToggle').checked = S.options.floats; $('#musicToggle').checked = S.options.music; $('#soundToggle').checked = S.options.sounds; $('#themeSelect').value = S.options.theme; seedChips(); renderBuildings(); renderUpgrades(); renderAchievements(); updateCounters(); $('#saveInfo').textContent = S.lastSave ? 'Last save: '+new Date(S.lastSave).toLocaleString() : 'Last save: —'; }
 
   function checkAchievements(){ for(const a of ACHIEVEMENTS){ if(!S.achievements[a.id] && a.cond(S)){ S.achievements[a.id]=true; toast('Achievement: '+a.name); } } }
 
   function updateAll(){ renderBuildings(); renderUpgrades(); renderAchievements(); updateCounters(); checkAchievements(); $('#exportBox').value = btoa(unescape(encodeURIComponent(JSON.stringify(S)))); }
 
   // ----------- Floating numbers ----------
-  function spawnFloat(txt,x=rand(innerWidth/2-80,innerWidth/2+80),y=rand(innerHeight/2-80,innerHeight/2+80)){ if(!S.options.floats) return; const el=document.createElement('div'); el.textContent=txt; el.style.position='fixed'; el.style.left=(x)+'px'; el.style.top=(y)+'px'; el.style.fontWeight='800'; el.style.color='#fff'; el.style.zIndex=9999; el.style.pointerEvents='none'; el.style.textShadow='0 6px 18px rgba(0,0,0,.6)'; document.body.appendChild(el); const v=rand(-40,-80); el.animate([{transform:'translateY(0)',opacity:1},{transform:`translateY(${v}px)`,opacity:0}],{duration:900,easing:'cubic-bezier(.2,.8,.2,1)'}); setTimeout(()=>el.remove(),900); }
+  function spawnFloat(txt,x=rand(innerWidth/2-100,innerWidth/2+100),y=rand(innerHeight/2-100,innerHeight/2+100)){ if(!S.options.floats) return; const el=document.createElement('div'); el.textContent=txt; el.style.position='fixed'; el.style.left=(x)+'px'; el.style.top=(y)+'px'; el.style.fontWeight='800'; el.style.color='#fff'; el.style.zIndex=9999; el.style.pointerEvents='none'; el.style.textShadow='0 6px 18px rgba(0,0,0,.6)'; document.body.appendChild(el); const v=rand(-40,-80); el.animate([{transform:'translateY(0)',opacity:1},{transform:`translateY(${v}px)`,opacity:0}],{duration:900,easing:'cubic-bezier(.2,.8,.2,1)'}); setTimeout(()=>el.remove(),900); }
 
   // ---------- Main loop ----------
   let last = Date.now(); function tick(){ const now=Date.now(); const dt=(now-last)/1000; last=now; const mult=currentTimedMult(); const gain = calcCPS()*mult*dt; if(gain>0){ S.cookies += gain; S.cookiesAllTime += gain; } maybeSpawnGolden(dt); updateCounters(); quickSaveIfDue(); requestAnimationFrame(tick); }
@@ -283,7 +353,7 @@
   // ---------- DOM Events ----------
   function bind(){ // cookie click
     $('#bigCookie').addEventListener('click',e=>{ const rect=e.currentTarget.getBoundingClientRect(); clickCookie(e.clientX,e.clientY); $('#bigCookie').animate([{transform:'scale(1)'},{transform:'scale(.97)'},{transform:'scale(1)'}],{duration:120}); });
-    document.addEventListener('keydown',e=>{ if(e.code==='Space' || e.code==='Enter'){ e.preventDefault(); clickCookie(rand(innerWidth/2-80,innerWidth/2+80),rand(innerHeight/2-80,innerHeight/2+80)); } });
+    document.addEventListener('keydown',e=>{ if(e.code==='Space' || e.code==='Enter'){ e.preventDefault(); clickCookie(rand(innerWidth/2-100,innerWidth/2+100),rand(innerHeight/2-100,innerHeight/2+100)); } });
 
     // tabs
     $$('.tab').forEach(t=>t.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); $$('.view').forEach(v=>v.style.display='none'); const id='view-'+t.dataset.view; const el=document.getElementById(id); if(el) el.style.display='block'; }));
@@ -293,6 +363,10 @@
 
     $('#autosaveInput').onchange = e=>{ const v=parseInt(e.target.value)||15; S.options.autosave=v; };
     $('#nameInput').onchange = e=>{ S.bakeryName = e.target.value || 'Sunbeam Bakery'; $('#bakeryName').textContent = S.bakeryName; };
+    $('#floatToggle').onchange = e=> S.options.floats = e.target.checked;
+    $('#musicToggle').onchange = e=> { S.options.music = e.target.checked; if(S.options.music) $('#bgMusic').play(); else $('#bgMusic').pause(); };
+    $('#soundToggle').onchange = e=> S.options.sounds = e.target.checked;
+    $('#themeSelect').onchange = e=> { S.options.theme = e.target.value; document.body.className = S.options.theme; }; // Assume light theme CSS vars elsewhere
 
     // building buy hotkeys in shop will attach on render
   }
