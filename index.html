@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cookie Nigger</title>
+  <title>Sunbeam Bakery</title>
   <meta name="description" content="A complex Cookie Clicker-style incremental game ready for GitHub Pages. Fully client-side, autosave, export/import." />
   <style>
-    :root{--bg:#0b0e14;--card:#0f1724;--muted:#9aa3b2;--accent:#ffd893;--accent-2:#f5b2ff;--text:#eef3ff}
+    :root{--bg:#0b0e14;--card:#0f1724;--muted:#9aa3b2;--accent:#ffd893;--accent-2:#f5b2ff;--text:#eef3ff;--cookie-base:#c98b55;--cookie-dark:#8a4f2a;--cookie-shadow:#5a3216;--highlight:#fff8cc;--shine:#ffd154}
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:var(--text);background:linear-gradient(180deg,#071021 0%, #081227 35%, #07121b 100%);}
     .wrap{max-width:1200px;margin:20px auto;padding:18px;display:grid;grid-template-columns:360px 1fr 360px;gap:18px}
@@ -21,13 +21,17 @@
     .left .stats{display:grid;gap:8px}
     .big-cookie-wrap{display:flex;align-items:center;justify-content:center;padding:18px}
     .big-cookie{width:280px;height:280px;border-radius:50%;position:relative;cursor:pointer;user-select:none;display:grid;place-items:center;transition:transform .08s ease}
-    /* cookie look: layered gradients + chips */
+    /* improved cookie look: more detailed gradients, more chips, subtle texture */
     .big-cookie .surface{position:absolute;inset:0;border-radius:50%;
       background:
         radial-gradient(60% 45% at 65% 35%, rgba(255,255,255,.12), transparent 15%),
         radial-gradient(30% 25% at 30% 70%, rgba(255,240,200,.06), transparent 10%),
-        linear-gradient(180deg,#c98b55,#8a4f2a 60%,#5a3216 100%);
+        radial-gradient(20% 15% at 50% 50%, rgba(255,240,200,.08), transparent 20%),
+        linear-gradient(180deg,var(--cookie-base),var(--cookie-dark) 60%,var(--cookie-shadow) 100%);
       box-shadow:0 20px 50px rgba(0,0,0,.55), inset 0 -14px 30px rgba(0,0,0,.3), inset 0 8px 24px rgba(255,255,255,.04);
+      /* subtle texture */
+      background-image: linear-gradient(180deg,var(--cookie-base),var(--cookie-dark) 60%,var(--cookie-shadow) 100%), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAADBJREFUOE9jYOBa2cDAwMAABgABmQtOqwAAAABJRU5ErkJggg==');
+      background-blend-mode: overlay;
     }
     .big-cookie .shine{position:absolute;left:18%;top:8%;width:60%;height:60%;border-radius:50%;background:radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.25), rgba(255,255,255,.02) 30%, transparent 60%);filter:blur(6px);mix-blend-mode:screen}
     .chip{position:absolute;border-radius:50%;width:28px;height:28px;background:linear-gradient(180deg,#3b2314,#1e110a);box-shadow:inset 0 2px 4px rgba(255,255,255,.03),0 8px 18px rgba(0,0,0,.45)}
@@ -135,7 +139,7 @@
     </aside>
 
     <footer class="footer panel">
-      <div>Client-only • Host on GitHub Pages • <span id="version">v1.2</span></div>
+      <div>Client-only • Host on GitHub Pages • <span id="version">v1.3</span></div>
       <div id="saveInfo">Last save: —</div>
     </footer>
   </div>
@@ -155,22 +159,45 @@
     {id:'cursor',name:'Cursor',icon:'🖱️',base:15,mult:1.15,cps:0.1,desc:'Autoclicks occasionally.'},
     {id:'grandma',name:'Grandma',icon:'👵',base:100,mult:1.15,cps:1,desc:'Bakes with love.'},
     {id:'farm',name:'Farm',icon:'🌾',base:1100,mult:1.15,cps:8,desc:'Grows cookie crops.'},
-    {id:'factory',name:'Factory',icon:'🏭',base:13000,mult:1.15,cps:80,desc:'Industrial baking.'},
-    {id:'bank',name:'Bank',icon:'🏦',base:100000,mult:1.15,cps:650,desc:'Cookie interest.'},
-    {id:'temple',name:'Temple',icon:'⛩️',base:1234567,mult:1.15,cps:5000,desc:'Prayers for dough.'},
+    {id:'mine',name:'Mine',icon:'⛏️',base:12000,mult:1.15,cps:47,desc:'Mines out chocolate chips.'},
+    {id:'factory',name:'Factory',icon:'🏭',base:130000,mult:1.15,cps:260,desc:'Industrial baking.'},
+    {id:'bank',name:'Bank',icon:'🏦',base:1400000,mult:1.15,cps:1400,desc:'Cookie interest.'},
+    {id:'temple',name:'Temple',icon:'⛩️',base:20000000,mult:1.15,cps:7800,desc:'Prayers for dough.'},
+    {id:'wizard',name:'Wizard Tower',icon:'🧙',base:330000000,mult:1.15,cps:44000,desc:'Spells for sweets.'},
+    {id:'shipment',name:'Shipment',icon:'🚀',base:5100000000,mult:1.15,cps:260000,desc:'Interplanetary cookies.'},
+    {id:'alchemy',name:'Alchemy Lab',icon:'⚗️',base:75000000000,mult:1.15,cps:1600000,desc:'Transmutes gold into cookies.'},
   ];
 
   const UPGRADES = [
     {id:'reinforced',name:'Reinforced Index Finger',icon:'👉',desc:'Double your click power',cost:100,apply:s=>s.clickMult*=2,show: s=>s.totalClicks>=20},
     {id:'carpal',name:'Carpal Tunnel Cream',icon:'🧴',desc:'+2 to base click',cost:800,apply:s=>s.baseClick+=2,show:s=>s.totalClicks>=200},
+    {id:'ambidextrous',name:'Ambidextrous',icon:'👐',desc:'+5 to base click',cost:5000,apply:s=>s.baseClick+=5,show:s=>s.totalClicks>=1000},
     {id:'grandmaRecr',name:'Grandma Recruitment',icon:'🧁',desc:'Grandmas produce +100%',cost:5000,apply:s=>s.buildings['grandma'].mult*=2,show:s=>s.buildings['grandma'].count>=5},
+    {id:'grandmaLove',name:'Grandma Love',icon:'❤️',desc:'Grandmas +50% production',cost:15000,apply:s=>s.buildings['grandma'].mult*=1.5,show:s=>s.buildings['grandma'].count>=15},
     {id:'factoryBoost',name:'Factory Automation',icon:'🔧',desc:'Factories +150% production',cost:25000,apply:s=>s.buildings['factory'].mult*=2.5,show:s=>s.buildings['factory'].count>=3},
+    {id:'factoryOverclock',name:'Factory Overclock',icon:'⚙️',desc:'Factories +100% production',cost:100000,apply:s=>s.buildings['factory'].mult*=2,show:s=>s.buildings['factory'].count>=10},
+    {id:'farmFertilizer',name:'Farm Fertilizer',icon:'🌱',desc:'Farms +200% production',cost:20000,apply:s=>s.buildings['farm'].mult*=3,show:s=>s.buildings['farm'].count>=5},
+    {id:'mineDrill',name:'Deep Drilling',icon:'🕳️',desc:'Mines +100% production',cost:50000,apply:s=>s.buildings['mine'].mult*=2,show:s=>s.buildings['mine'].count>=5},
+    {id:'bankInterest',name:'Compound Interest',icon:'💰',desc:'Banks +50% production',cost:200000,apply:s=>s.buildings['bank'].mult*=1.5,show:s=>s.buildings['bank'].count>=5},
+    {id:'templePrayer',name:'Divine Blessing',icon:'🙏',desc:'Temples +100% production',cost:1000000,apply:s=>s.buildings['temple'].mult*=2,show:s=>s.buildings['temple'].count>=3},
+    {id:'wizardMana',name:'Mana Surge',icon:'✨',desc:'Wizard Towers +150% production',cost:5000000,apply:s=>s.buildings['wizard'].mult*=2.5,show:s=>s.buildings['wizard'].count>=3},
+    {id:'shipmentWarp',name:'Warp Drive',icon:'🌌',desc:'Shipments +100% production',cost:20000000,apply:s=>s.buildings['shipment'].mult*=2,show:s=>s.buildings['shipment'].count>=3},
+    {id:'alchemyGold',name:'Philosopher\'s Stone',icon:'🪄',desc:'Alchemy Labs +200% production',cost:100000000,apply:s=>s.buildings['alchemy'].mult*=3,show:s=>s.buildings['alchemy'].count>=3},
+    {id:'globalBoost1',name:'Cookie Amplifier',icon:'🔊',desc:'Global production +10%',cost:100000,apply:s=>s.globalMult*=1.1,show:s=>s.cookiesAllTime>=100000},
+    {id:'globalBoost2',name:'Mega Amplifier',icon:'📢',desc:'Global production +20%',cost:1000000,apply:s=>s.globalMult*=1.2,show:s=>s.cookiesAllTime>=1000000},
   ];
 
   const ACHIEVEMENTS = [
     {id:'click100',name:'Finger Gym',desc:'Click 100 times',cond:s=>s.totalClicks>=100},
+    {id:'click1000',name:'Click Master',desc:'Click 1,000 times',cond:s=>s.totalClicks>=1000},
     {id:'cookies1k',name:'Cookie Jar',desc:'Have 1,000 cookies banked',cond:s=>s.cookies>=1000},
+    {id:'cookies1m',name:'Cookie Vault',desc:'Have 1,000,000 cookies banked',cond:s=>s.cookies>=1000000},
     {id:'own10',name:'Collector',desc:'Own 10 buildings total',cond:s=>totalBuildings(s)>=10},
+    {id:'own50',name:'Hoarder',desc:'Own 50 buildings total',cond:s=>totalBuildings(s)>=50},
+    {id:'grandma10',name:'Grandma Army',desc:'Own 10 grandmas',cond:s=>s.buildings['grandma'].count>=10},
+    {id:'factory5',name:'Industrialist',desc:'Own 5 factories',cond:s=>s.buildings['factory'].count>=5},
+    {id:'allUpgrades',name:'Upgrade Maniac',desc:'Buy all upgrades',cond:s=>Object.keys(s.upgrades).length >= UPGRADES.length},
+    {id:'goldenClick',name:'Lucky Day',desc:'Click a golden cookie',cond:s=>s.goldenClicks>=1},
   ];
 
   // ---------- State ----------
@@ -183,6 +210,7 @@
     clickMult:1,
     globalMult:1,
     totalClicks:0,
+    goldenClicks:0,
     buildings:{},
     upgrades:{},
     achievements:{},
@@ -227,10 +255,10 @@
   // ---------- Golden cookie ----------
   let goldenTimer = rand(40,120);
   function maybeSpawnGolden(dt){goldenTimer -= dt; if(goldenTimer<=0){spawnGolden(); goldenTimer = rand(45,120);} }
-  function spawnGolden(){ const g = document.createElement('div'); g.className='golden'; g.style.position='fixed'; g.style.width='64px'; g.style.height='64px'; g.style.borderRadius='50%'; g.style.display='grid'; g.style.placeItems='center'; g.style.left=rand(80,innerWidth-160)+'px'; g.style.top=rand(120,innerHeight-220)+'px'; g.style.zIndex=9999; g.style.background='radial-gradient(circle at 30% 30%, #fff8cc, #ffd154 40%, #d09b2a 70%, #8a5a1f 100%)'; g.textContent='🍯'; document.body.appendChild(g); const t=setTimeout(()=>g.remove(),12000); g.onclick=()=>{clearTimeout(t); g.remove(); if(Math.random()<0.5){ addTimedMult(7,30000); toast('Frenzy! x7 for 30s'); } else { const gain = Math.max(100, calcCPS()*10 + cookiesPerClick()*50); addCookies(gain); toast('Cookie shower! +'+fmt(gain)); } updateAll(); } }
+  function spawnGolden(){ const g = document.createElement('div'); g.className='golden'; g.style.position='fixed'; g.style.width='64px'; g.style.height='64px'; g.style.borderRadius='50%'; g.style.display='grid'; g.style.placeItems='center'; g.style.left=rand(80,innerWidth-160)+'px'; g.style.top=rand(120,innerHeight-220)+'px'; g.style.zIndex=9999; g.style.background='radial-gradient(circle at 30% 30%, var(--highlight), var(--shine) 40%, #d09b2a 70%, #8a5a1f 100%)'; g.textContent='🍯'; document.body.appendChild(g); const t=setTimeout(()=>g.remove(),12000); g.onclick=()=>{clearTimeout(t); g.remove(); S.goldenClicks++; if(Math.random()<0.5){ addTimedMult(7,30000); toast('Frenzy! x7 for 30s'); } else { const gain = Math.max(100, calcCPS()*10 + cookiesPerClick()*50); addCookies(gain); toast('Cookie shower! +'+fmt(gain)); } updateAll(); } }
 
   // ---------- UI Rendering ----------
-  function seedChips(){const wrap=$('#chips');wrap.innerHTML=''; const r=110,cx=140,cy=140; for(let i=0;i<28;i++){const t=Math.random()*Math.PI*2;const rr=r*rand(.25,.9);const x=cx+Math.cos(t)*rr;const y=cy+Math.sin(t)*rr;const el=document.createElement('div');el.className='chip';el.style.left=(x-14)+'px';el.style.top=(y-14)+'px';wrap.appendChild(el);} }
+  function seedChips(){const wrap=$('#chips');wrap.innerHTML=''; const r=110,cx=140,cy=140; for(let i=0;i<40;i++){const t=Math.random()*Math.PI*2;const rr=r*rand(.25,.9);const x=cx+Math.cos(t)*rr;const y=cy+Math.sin(t)*rr;const el=document.createElement('div');el.className='chip';el.style.left=(x-14)+'px';el.style.top=(y-14)+'px';el.style.width=rand(20,32)+'px';el.style.height=el.style.width;wrap.appendChild(el);} }
 
   function renderBuildings(){const g=$('#shopList'); g.innerHTML=''; for(const b of BUILDINGS){ const st=S.buildings[b.id]; const nextCost=Math.floor(b.base * Math.pow(b.mult, st.count)); const el=document.createElement('div'); el.className='shop-row'+(S.cookies<nextCost?' locked':''); el.innerHTML=`<div style="font-size:22px">${b.icon}</div><div style="flex:1"><div style="font-weight:800">${b.name} <small style="color:var(--muted);font-weight:600">x${st.count}</small></div><div style="color:var(--muted);font-size:13px">${b.desc}</div></div><div style="text-align:right"><div style="font-weight:900;color:var(--accent)">${fmt(nextCost)}</div><div class="btns"><button class="btn" data-buy="1">+1</button><button class="btn" data-buy="10">+10</button></div></div>`; el.querySelector('[data-buy="1"]').onclick=()=>buyBuilding(b.id,1); el.querySelector('[data-buy="10"]').onclick=()=>buyBuilding(b.id,10); g.appendChild(el);} }
 
